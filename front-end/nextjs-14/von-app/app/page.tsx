@@ -1,52 +1,49 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { existsUsername, login } from "./components/users/service/user-service";
 import { IUser } from "./components/users/model/user-model";
-import { getLoginResult, getUsernameResult } from "./components/users/service/user-slice";
+import { getUsernameResult } from "./components/users/service/user-slice";
 import { parseCookies, setCookie } from "nookies";
 import { jwtDecode } from "jwt-decode";
 
 export default function Home() {
 
-  const router = useRouter();
-
+  const router = useRouter()
   const dispatch = useDispatch()
-  const result = useSelector(getLoginResult)
+  const userNameResult = useSelector(getUsernameResult)
+  const formRef = useRef<HTMLInputElement>(null)
 
   const [isWrongId, setIsWrongId] = useState(false)
   const [isWrongPW, setIsWrongPW] = useState(false)
-
-  const userNameResult  = useSelector(getUsernameResult)
-
   const [user, setUser] = useState({} as IUser)
-  
+
+
   const handleId = (e: any) => {
-    const ID_CHECK = /^[a-z][a-zA-Z]{3,19}$/g;
+    const ID_CHECK = /^[a-z][a-zA-Z0-9]{3,12}$/g;
     // 영어 소문자로 시작하는 4~20자의 영어 소문자 또는 숫자
-    if(ID_CHECK.test(e.target.value)){
+    if (ID_CHECK.test(e.target.value)) {
       setIsWrongId(false)
       setUser({
         ...user,
         username: e.target.value
       })
     }
-    else{
+    else {
       setIsWrongId(true)
     }
-    
   }
 
   const handlePW = (e: any) => {
     const PW_CHECK = /^[\w!@#$%^&*()-+=~`{}[\]:;'",.<>? ]{3,16}$/g;
     // 최소 3 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자
-    if(PW_CHECK.test(e.target.value)){
+    if (PW_CHECK.test(e.target.value)) {
       setIsWrongPW(false)
-    }else{
+    } else {
       setIsWrongPW(true)
     }
     setUser({
@@ -56,28 +53,55 @@ export default function Home() {
   }
 
   const handleSubmit = () => {
-    console.log('page user ' + JSON.stringify(user))
     dispatch(existsUsername(user.username))
-    console.log('아이디 유무 확인 '+userNameResult)
-    // dispatch(login(user))
+      .then((res: any) => {
+        if (res.payload.message === "SUCCESS") {
+          dispatch(login(user))
+            .then((res: any) => {
+              console.log('res' + JSON.stringify(res))
+              setCookie({}, 'message', res.payload.message, { httpOnly: false, path: '/' })
+              setCookie({}, 'accessToken', res.payload.accessToken, { httpOnly: false, path: '/' })
+              console.log('서버에서 넘어온 메시지1 ' + parseCookies().message)
+              console.log('서버에서 넘어온 토큰2 ' + parseCookies().accessToken)
+              console.log(jwtDecode<any>(parseCookies().token))
+              jwtDecode<any>(parseCookies().token)?.username
+              // router.push('/pages/board/list')
+            })
+            .catch((error: any) => { console.log('로그인 실패') })
+        } else {
+          console.log('아이디가 존재하지 않습니다.')
+          //아이디 정규표현식 ...
+        }
+      })
+      .catch((error: any) => {
+
+      })
+      .finally(() => {
+        console.log('최종적으로 반드시 이뤄져야 할 로직')
+      })
+      setIsWrongId(false)
+      if (formRef.current) {
+        formRef.current.value = ""
+      }
   }
 
-  useEffect(() => {
-    if (result.message === "SUCCESS") {
-      setCookie({}, 'message', result.message, { httpOnly: false, path: '/' })
-      setCookie({}, 'token', result.token, { httpOnly: false, path: '/' })
-      console.log('서버에서 넘어온 메시지 ' + parseCookies().message)
-      console.log('서버에서 넘어온 토큰 ' + parseCookies().token)
-      console.log(jwtDecode<any>(parseCookies().token))
-      jwtDecode<any>(parseCookies().token)?.username
-      // router.push('/pages/board/list')
-    } else {
-      console.log('로그인 실패')
-    }
-  }, [result]) // []가 비어있으면 useEffect가 한 번만 실행됨.
+  // useEffect(() => {
+  //   if (result.message === "SUCCESS") {
+  //     setCookie({}, 'message', result.message, { httpOnly: false, path: '/' })
+  //     setCookie({}, 'token', result.token, { httpOnly: false, path: '/' })
+  //     console.log('서버에서 넘어온 메시지 ' + parseCookies().message)
+  //     console.log('서버에서 넘어온 토큰 ' + parseCookies().token)
+  //     console.log(jwtDecode<any>(parseCookies().token))
+  //     jwtDecode<any>(parseCookies().token)?.username
+  //     // router.push('/pages/board/list')
+  //     router.refresh
+  //   } else {
+  //     console.log('로그인 실패')
+  //   }
+  // }, [result]) // []가 비어있으면 useEffect가 한 번만 실행됨.
 
 
-  
+
   return (
     <div className='text-center'>
       <div className="flex items-center justify-center w-full px-5 sm:px-0">
@@ -101,21 +125,21 @@ export default function Home() {
               />
             </div>
 
-            {!isWrongId && (user.username) !== undefined  && (<pre>
+            {!isWrongId && (user.username) !== undefined && (<pre>
               <h6 className="text-blue-600">
-                사용가능한 아이디 입니다. 
+                사용가능한 아이디 입니다.
               </h6>
             </pre>)}
 
-            {isWrongId && (user.username) !== undefined && (<pre>
+            {isWrongId && (user.username)?.length!=0 && (<pre>
               <h6 className="text-red-600">
-                잘못된 아이디 입니다. 
+                잘못된 아이디 입니다.
               </h6>
             </pre>)}
 
-            {userNameResult && userNameResult.message==='FAILURE' && (<pre>
+            {userNameResult && userNameResult.message === 'FAILURE' && (<pre>
               <h6 className="text-red-600">
-                존재하지 않는 아이디 입니다. 
+                존재하지 않는 아이디 입니다.
               </h6>
             </pre>)}
 
@@ -125,15 +149,15 @@ export default function Home() {
                   Password
                 </label>
               </div>
-              <input
+              <input ref={formRef}
                 className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-2 focus:outline-blue-700"
                 type="password" onChange={handlePW}
               />
               {isWrongPW && (<pre>
-              <h6 className="text-red-600">
-                잘못된 비밀번호 입니다. 
-              </h6>
-            </pre>)}
+                <h6 className="text-red-600">
+                  잘못된 비밀번호 입니다.
+                </h6>
+              </pre>)}
               <a
                 href="#"
                 className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
@@ -190,7 +214,7 @@ export default function Home() {
           </div>
         </div>
       </div><br /><br />
-      
+
     </div>
   );
 }

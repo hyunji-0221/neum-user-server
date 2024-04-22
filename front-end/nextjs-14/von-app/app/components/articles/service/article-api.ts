@@ -1,4 +1,4 @@
-import { instance } from "@/app/components/common/configs/axios-configs"
+import instance from "@/app/components/common/configs/axios-configs"
 import { IArticle } from "../model/article-model"
 
 export const findAllArticlesAPI = async (page:number) => {

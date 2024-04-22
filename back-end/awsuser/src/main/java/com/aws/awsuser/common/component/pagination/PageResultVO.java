@@ -1,4 +1,4 @@
-package com.aws.awsuser.common.component;
+package com.aws.awsuser.common.component.pagination;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

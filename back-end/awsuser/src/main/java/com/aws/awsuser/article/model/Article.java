@@ -12,7 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @ToString(exclude = "id")
 
-@Entity(name = "articles")
+@Entity(name = "articles") // entity manager가 관리
 
 @Builder
 @AllArgsConstructor

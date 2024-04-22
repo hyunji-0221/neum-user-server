@@ -1,6 +1,6 @@
 package com.aws.awsuser.user.service;
 
-import com.aws.awsuser.common.component.JwtProvider;
+import com.aws.awsuser.common.component.security.JwtProvider;
 import com.aws.awsuser.common.component.MessengerVO;
 import com.aws.awsuser.user.model.User;
 import com.aws.awsuser.user.model.UserDTO;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+
 
 @Log4j2
 @Service
@@ -90,25 +91,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public MessengerVO login(UserDTO dto) {
         User user = repo.findByUsername(dto.getUsername()).get();
-        String token = jwtProvider.createToken(entityToDto(user));
+        String accessToken = jwtProvider.createToken(entityToDto(user));
         boolean flag = user.getPassword().equals(dto.getPassword());
 
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
+        jwtProvider.getPayload(accessToken);
 
-        String header = new String(decoder.decode(chunks[0]));
-        String payload = new String(decoder.decode(chunks[1]));
-
-        log.info("Token Header : "+header);
-        log.info("Token payload : "+payload);
-
-        repo.modifyTokenById(token,user.getId());
+        repo.modifyTokenById(accessToken,user.getId());
 
         return MessengerVO.builder()
                 .message(flag ? "SUCCESS" : "FAILURE")
-                .token(flag ? token : "None")
+                .accessToken(flag ? accessToken : "None")
                 .build();
     }
+
+
 
     @Override
     public MessengerVO existsUsername(String username) {
