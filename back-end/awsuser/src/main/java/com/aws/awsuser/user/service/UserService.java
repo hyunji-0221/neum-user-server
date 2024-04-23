@@ -42,7 +42,9 @@ public interface UserService extends CommandService<UserDTO>, QueryService<UserD
                 .build();
     }
 
-    MessengerVO login(UserDTO param);
 
     MessengerVO existsUsername(String username);
+
+    MessengerVO login(UserDTO param);
+    Boolean logout(Long id);
 }

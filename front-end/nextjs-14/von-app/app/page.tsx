@@ -10,6 +10,7 @@ import { IUser } from "./components/users/model/user-model";
 import { getUsernameResult } from "./components/users/service/user-slice";
 import { parseCookies, setCookie } from "nookies";
 import { jwtDecode } from "jwt-decode";
+import { PG } from "./components/common/enums/PG";
 
 export default function Home() {
 
@@ -53,36 +54,44 @@ export default function Home() {
   }
 
   const handleSubmit = () => {
+    console.log('user ...' + JSON.stringify(user))
     dispatch(existsUsername(user.username))
       .then((res: any) => {
-        if (res.payload.message === "SUCCESS") {
+        if (res.payload.message == "SUCCESS") {
           dispatch(login(user))
-            .then((res: any) => {
-              console.log('res' + JSON.stringify(res))
-              setCookie({}, 'message', res.payload.message, { httpOnly: false, path: '/' })
-              setCookie({}, 'accessToken', res.payload.accessToken, { httpOnly: false, path: '/' })
-              console.log('서버에서 넘어온 메시지1 ' + parseCookies().message)
-              console.log('서버에서 넘어온 토큰2 ' + parseCookies().accessToken)
-              console.log(jwtDecode<any>(parseCookies().token))
-              jwtDecode<any>(parseCookies().token)?.username
-              // router.push('/pages/board/list')
+            .then((resp: any) => {
+                console.log('서버에서 넘어온 RES ' + JSON.stringify(resp))
+                console.log('서버에서 넘어온 메시지 1 ' + resp.payload.message)
+                console.log('서버에서 넘어온 토큰 1 ' + resp.payload.accessToken)
+                setCookie({}, 'message', resp.payload.message, { httpOnly: false, path: '/' })
+                setCookie({}, 'accessToken', resp.payload.accessToken, { httpOnly: false, path: '/' })
+                console.log('서버에서 넘어온 메시지 2 ' + parseCookies().message)
+                console.log('서버에서 넘어온 토큰 2 ' + parseCookies().accessToken)
+                console.log('토큰을 디코드한 내용 : ')
+                console.log(jwtDecode<any>(parseCookies().accessToken))
+                router.push(`${PG.BOARD}/list`)
+                router.refresh()
             })
-            .catch((error: any) => { console.log('로그인 실패') })
-        } else {
-          console.log('아이디가 존재하지 않습니다.')
-          //아이디 정규표현식 ...
+            .catch((err: any) => {
+              console.log('로그인 실패')
+             })
+
+        }else{
+          console.log('아이디가 존재하지 않습니다')
+          
         }
       })
-      .catch((error: any) => {
-
+      .catch((err: any) => {
+        console.log('catch 로직 err 발생 : '+ `${err}`)
       })
       .finally(() => {
         console.log('최종적으로 반드시 이뤄져야 할 로직')
       })
-      setIsWrongId(false)
-      if (formRef.current) {
-        formRef.current.value = ""
-      }
+    // dispatch(login(user))
+    if (formRef.current) {
+      formRef.current.value = "";
+    }
+
   }
 
   // useEffect(() => {
@@ -131,7 +140,7 @@ export default function Home() {
               </h6>
             </pre>)}
 
-            {isWrongId && (user.username)?.length!=0 && (<pre>
+            {isWrongId && (user.username)?.length != 0 && (<pre>
               <h6 className="text-red-600">
                 잘못된 아이디 입니다.
               </h6>

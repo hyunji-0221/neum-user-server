@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -15,11 +14,9 @@ public class WebMvcConfig implements WebMvcConfigurer {//인터셉터를 스프�
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("locale");
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/favicon.ico");
+                .excludePathPatterns("/api/auth/**"); //이 경로로 들어오는 요청은 토큰이 없더라도 요청을 받아드림. = 인터셉터를 타지 않음.
     }
 
 }

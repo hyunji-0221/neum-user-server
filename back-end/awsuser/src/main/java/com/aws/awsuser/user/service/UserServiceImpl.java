@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         String accessToken = jwtProvider.createToken(entityToDto(user));
         boolean flag = user.getPassword().equals(dto.getPassword());
 
-        jwtProvider.getPayload(accessToken);
+        jwtProvider.printPayload(accessToken);
 
         repo.modifyTokenById(accessToken,user.getId());
 
@@ -113,5 +113,8 @@ public class UserServiceImpl implements UserService {
                 .message(repo.existsByUsername(username)? "SUCCESS": "FAILURE").build();
     }
 
-
+    @Override
+    public Boolean logout(Long id) {
+        return null;
+    }
 }

@@ -71,16 +71,12 @@ public class UserController {
         return ResponseEntity.ok(service.findUsersByName(name));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<MessengerVO> login(@RequestBody UserDTO param) {
-        //controller는 로직을 주지 않을 것임.
-        return ResponseEntity.ok(service.login(param));
-    }
-
-    @GetMapping("/exists-username")
-    public ResponseEntity<MessengerVO> existsUsername(@RequestParam("username") String username){
-        log.info("컨트롤러 "+username);
-        return ResponseEntity.ok(service.existsUsername(username));
+    @GetMapping("/logout")
+    public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String accessToken){
+        log.info("logout request : {}", accessToken);
+        Long id = 1L;
+        Boolean flag = service.logout(id);
+        return ResponseEntity.ok(flag);
     }
 
 }

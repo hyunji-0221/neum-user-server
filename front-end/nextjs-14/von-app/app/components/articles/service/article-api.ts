@@ -3,7 +3,7 @@ import { IArticle } from "../model/article-model"
 
 export const findAllArticlesAPI = async (page:number) => {
     try {
-        return (await instance.get('/articles/list', {
+        return (await instance().get('/articles/list', {
             params: {page, size: 10, limit: 10}
         })).data
     } catch (error) {
@@ -13,7 +13,7 @@ export const findAllArticlesAPI = async (page:number) => {
 
 export const findAllByBoardIdAPI = async(id:number) => {
     try{
-        return (await instance.get('/articles/listById',{
+        return (await instance().get('/articles/listById',{
             params : {id}
         })).data
     }catch(error){
@@ -23,7 +23,7 @@ export const findAllByBoardIdAPI = async(id:number) => {
 
 export const findArticleByIdAPI = async(art:IArticle) =>{
     try{
-        return (await instance.post('/articles/save', art)).data
+        return (await instance().post('/articles/save', art)).data
     }catch(error){
         return error
     }

@@ -48,7 +48,7 @@ function Header() {
         destroyCookie(null,'accessToken')
         setShowProfile(false)
         router.push('/')
-        router.refresh
+        router.refresh()
       })
       .catch((err: any) => {
         console.log('로그아웃 실행에서 에러가 발생함 : '+err)
@@ -65,7 +65,7 @@ function Header() {
 
         {!showProfile && <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
           <span className="sr-only">Open user menu</span>
-          <img className="w-8 h-8 rounded-full" src="/public/img/user/Default_pfp.png" alt="user photo" />
+          <img className="w-8 h-8 rounded-full" src="/img/user/userDefaultImg.png" alt="user photo" />
         </button>}
 
         {showProfile &&
