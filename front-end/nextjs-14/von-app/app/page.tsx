@@ -63,12 +63,15 @@ export default function Home() {
                 console.log('서버에서 넘어온 RES ' + JSON.stringify(resp))
                 console.log('서버에서 넘어온 메시지 1 ' + resp.payload.message)
                 console.log('서버에서 넘어온 토큰 1 ' + resp.payload.accessToken)
+
                 setCookie({}, 'message', resp.payload.message, { httpOnly: false, path: '/' })
                 setCookie({}, 'accessToken', resp.payload.accessToken, { httpOnly: false, path: '/' })
+
                 console.log('서버에서 넘어온 메시지 2 ' + parseCookies().message)
                 console.log('서버에서 넘어온 토큰 2 ' + parseCookies().accessToken)
                 console.log('토큰을 디코드한 내용 : ')
                 console.log(jwtDecode<any>(parseCookies().accessToken))
+                
                 router.push(`${PG.BOARD}/list`)
                 router.refresh()
             })

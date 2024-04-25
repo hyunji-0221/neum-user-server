@@ -17,6 +17,8 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
     @Query("select a " +
             "from articles a where a.board.id = :boardId order by a.id desc ")
     public List<Article> getArticlesByBoardId(@Param("boardId") Long boardId);
+    // Query Method 방식
+    List<Article> findAllByOrderByIdDesc();
 
     @Query("select a.title from articles a where a.title = :title")
     public boolean existsByArticleTitle(@Param("title") String title);
@@ -33,5 +35,6 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
             ", a.regDate, a.modDate";
 
     boolean existsByTitle (String title);
+
 
 }

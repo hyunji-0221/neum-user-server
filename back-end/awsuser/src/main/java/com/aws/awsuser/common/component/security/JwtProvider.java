@@ -59,9 +59,7 @@ public class JwtProvider {
     }
 
     public String extractTokenFromHeader(HttpServletRequest request) {
-        log.info("프론트에서 넘어온 리퀘스트값 request getServletPath : {}", request.getServletPath());
         String bearerToken = request.getHeader("Authorization");
-        log.info("프론트에서 넘어온 토큰 : {}", bearerToken);
         return bearerToken != null && bearerToken.startsWith("Bearer ") ? bearerToken.substring(7) : "undefined";
     }
 

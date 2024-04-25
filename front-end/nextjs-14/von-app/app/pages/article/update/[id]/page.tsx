@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode"
 import { parseCookies } from "nookies"
 import { PG } from "@/app/components/common/enums/PG"
 
-export default function ArticleSavePage() {
+export default function ArticleUpdatePage() {
 
     const dispatch = useDispatch()
     const router = useRouter()
@@ -47,15 +47,14 @@ export default function ArticleSavePage() {
     ]
 
     const onSubmit = (data: any) => {
-        data.boardId = parseInt(data.boardId);
         alert(JSON.stringify(data))
         dispatch(saveArticle(data))
         .then((res:any)=>{
-            const jihoon = res.payload.id
-            console.log(`게시글 작성 완료+ ${jihoon}`)
-            router.push(`${PG.ART}/list/${jihoon}`)
+            alert('게시글 작성 완료')
+            // router.push(`${PG.ART}/list/${boardId}`)
         })
         .catch((err:any)=>{
+
         })
     }
 
@@ -74,7 +73,7 @@ export default function ArticleSavePage() {
                     defaultValue={1} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {
                         options.map((item, index) => (
-                            <option key={item.id} title={item.title} value={item.id} >{item.content}</option>
+                            <option key={item.id} title={item.title}>{item.content} value={item.id}</option>
                         ))
                     }
                 </select>

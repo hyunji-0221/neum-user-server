@@ -19,9 +19,9 @@ import java.util.Optional;
 
 @RequestMapping(path="/api/boards")
 @Slf4j
-@ApiResponses(value = {
-        @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
-        @ApiResponse(responseCode = "404", description = "Customer not found")})
+//@ApiResponses(value = {
+//        @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+//        @ApiResponse(responseCode = "404", description = "Customer not found")})
 
 public class BoardController {
     private final BoardService service;

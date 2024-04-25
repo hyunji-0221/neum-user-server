@@ -39,7 +39,7 @@ public interface ArticleService extends CommandService<ArticleDTO>, QueryService
 
     default Article dtoToEntity(ArticleDTO dto){
         return Article.builder()
-                .id(dto.getId())
+//                .id(dto.getId())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .writer(User.builder().id(dto.getWriterId()).build())

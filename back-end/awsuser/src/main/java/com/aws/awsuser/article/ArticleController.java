@@ -7,6 +7,7 @@ import com.aws.awsuser.common.component.MessengerVO;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 @RequestMapping(path="/api/articles")
-@Slf4j
+@Log4j2
 
 
 @ApiResponses(value = {
@@ -32,7 +33,9 @@ public class ArticleController {
 
     @PostMapping( "/save")
     public ResponseEntity<MessengerVO> save(@RequestBody ArticleDTO dto) throws SQLException {
-        log.info("dto 넘어옴 "+dto);
+        log.info("dto 넘어옴 : {}",dto);
+        log.info("board" + dto.getBoardId());
+        log.info("writer" + dto.getWriterId());
         return ResponseEntity.ok(service.save(dto));
     }
 
@@ -44,7 +47,6 @@ public class ArticleController {
 
     @GetMapping(path = "/list")
     public ResponseEntity<List<ArticleDTO>> findByBoardId() throws SQLException {
-        log.info("정보 : {}");
         return ResponseEntity.ok(service.findAll());
     }
 

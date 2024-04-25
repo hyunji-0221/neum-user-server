@@ -90,9 +90,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public MessengerVO login(UserDTO dto) {
-        User user = repo.findByUsername(dto.getUsername()).get();
-        String accessToken = jwtProvider.createToken(entityToDto(user));
-        boolean flag = user.getPassword().equals(dto.getPassword());
+        var user = repo.findByUsername(dto.getUsername()).get();
+        var accessToken = jwtProvider.createToken(entityToDto(user));
+        var flag = user.getPassword().equals(dto.getPassword());
 
         jwtProvider.printPayload(accessToken);
 
@@ -104,8 +104,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-
-
     @Override
     public MessengerVO existsUsername(String username) {
         log.info("service "+username);
@@ -113,8 +111,12 @@ public class UserServiceImpl implements UserService {
                 .message(repo.existsByUsername(username)? "SUCCESS": "FAILURE").build();
     }
 
+    @Transactional
     @Override
-    public Boolean logout(Long id) {
-        return null;
+    public Boolean logout(String accessToken) {
+        Long id = jwtProvider.getPayload(accessToken.substring(7)).get("userId",Long.class);
+        String deleteToken = "";
+        repo.modifyTokenById(deleteToken,id);
+        return repo.findById(id).get().getToken().isEmpty();
     }
 }

@@ -1,7 +1,6 @@
 package com.aws.awsuser.common.component.interceptor;
 
 import com.aws.awsuser.common.component.security.JwtProvider;
-import com.aws.awsuser.user.model.User;
 import com.aws.awsuser.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,10 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
-import static java.lang.Long.sum;
 
 
 //interceptor인터페이스는 서블릿 컨테이너에 있음 -> 스프링에 만들었지만, 서블릿으로 자동으로 들어감

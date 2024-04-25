@@ -23,8 +23,18 @@ export const findAllByBoardIdAPI = async(id:number) => {
 
 export const findArticleByIdAPI = async(art:IArticle) =>{
     try{
-        return (await instance().post('/articles/save', art)).data
+        return (await instance().post('/articles/findById', art)).data
     }catch(error){
         return error
     }
 }
+
+export const saveArticleAPI = async(data:any) =>{
+    try{
+        console.log('api '+JSON.stringify(data))
+        return (await instance().post('/articles/save',data)).data
+    }catch(error){
+        return error
+    }
+}
+

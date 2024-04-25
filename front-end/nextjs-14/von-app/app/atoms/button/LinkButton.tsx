@@ -21,5 +21,5 @@ export const linkButtonTitles = [
     { id: 3, title: '카운터', path: `${PG.DEMO}/counter` },
     { id: 4, title: '게시판목록', path: `${PG.BOARD}/list` },
     { id: 5, title: '게시글목록', path: `${PG.ART}/list` },
-    { id: 6, title: '사용자목록', path: `${PG.USER}/list` }
+    { id: 6, title: '마이페이지', path: `${PG.USER}/detail/${1}` }//사용자 아이디 삽입.
 ];

@@ -67,15 +67,14 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<UserDTO>> findUsersByName(@RequestBody String name) {
+    public ResponseEntity<List<UserDTO>> findUsersByName(@RequestBody String name) {//body에 담아 보냄 -> request body에 담아 온 정보
         return ResponseEntity.ok(service.findUsersByName(name));
     }
 
     @GetMapping("/logout")
     public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String accessToken){
         log.info("logout request : {}", accessToken);
-        Long id = 1L;
-        Boolean flag = service.logout(id);
+        Boolean flag = service.logout(accessToken);
         return ResponseEntity.ok(flag);
     }
 

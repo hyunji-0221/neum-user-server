@@ -14,7 +14,7 @@ export const setInterceptor = (inputInstance:AxiosInstance)=>{
             const accessToken = parseCookies().accessToken
             console.log('Axios interceptor에서 쿠키에서 토큰을 추출함')
             config.headers['Content-Type'] = "application/json"
-            config.headers['Authorization'] = `Bearer ${accessToken}`
+            config.headers['Authorization'] = `Bearer ${parseCookies().accessToken}`
             return config
         },
         (error)=>{

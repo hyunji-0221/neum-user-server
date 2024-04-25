@@ -52,7 +52,7 @@ export default function UserDetailPage({ params }: any) { // payload를 사용
             {/* <span>수정일 : </span><Input  sx={{ fontSize: "1.2rem" }} defaultValue={getUser.modDate}/> <br /><br /> */}
             <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={modifyHandle}>수정</Button><br />
-                <Button variant="contained" onClick={deleteHandle}>삭제</Button>
+                <Button variant="contained" onClick={deleteHandle}>탈퇴</Button>
             </Stack>
         </>
     )

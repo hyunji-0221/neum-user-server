@@ -8,5 +8,5 @@ export const initialState:IArticle = {
     boardId : 0, 
     postdate : '',
     modDate : '', 
-    array: []
+    
 }

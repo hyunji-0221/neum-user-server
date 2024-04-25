@@ -19,28 +19,32 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Article extends BaseEntity {
 
     @Id
-    @Column(name="id",nullable = false)
+    @Column(name ="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @Column(name = "title", length = 128)
+    private String title;
+
+    @Column(name = "content", length = 1024)
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
 
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     //mock 테스트 477 참고
-    public static Article of(Long id, String title, String content){
-        Article article = new Article();
-        article.id = id;
-        article.title = title;
-        article.content = content;
-        return article;
-    }
+//    public static Article of(Long id, String title, String content){
+//        Article article = new Article();
+//        article.id = id;
+//        article.title = title;
+//        article.content = content;
+//        return article;
+//    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.aws.awsuser.user.repository;
 
 
+import com.aws.awsuser.article.model.Article;
 import com.aws.awsuser.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,4 +21,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
     void modifyTokenById(@Param("token") String token, @Param("id") Long id);
 
     Boolean existsByUsername(String username);
+
 }
