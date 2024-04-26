@@ -11,58 +11,34 @@ import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
 import { parseCookies } from "nookies"
 import { PG } from "@/app/components/common/enums/PG"
+import { getAllBoards } from "@/app/components/boards/service/board-slice"
+import { findAllBoards } from "@/app/components/boards/service/board-service"
+import { IBoard } from "@/app/components/boards/model/board"
 
 export default function ArticleSavePage() {
 
     const dispatch = useDispatch()
     const router = useRouter()
-    const articleDetail = useSelector(getArticleDetail)
+    const boards:any = useSelector(getAllBoards)
+    
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [art, setArt] = useState({} as IArticle)
-
-    const titleHandler = (e: any) => {
-        setArt({
-            ...art,
-            title: e.target.value
-        })
-    }
-
-    const contentHandler = (e: any) => {
-        setArt({
-            ...art,
-            content: e.target.value
-        })
-    }
-
-    const [content, setContent] = useState('')
-    const selectHandler = (e: any) => {
-        setContent(e.target.value)
-    }
-
-    //지우고 useEffect로 백엔드에서 가져올 것.
-    const options = [
-        { id: 1, title: "qna", content: "Q&A" },
-        { id: 2, title: "review", content: "Review" },
-        { id: 3, title: "free", content: "Free Board" }
-    ]
 
     const onSubmit = (data: any) => {
         data.boardId = parseInt(data.boardId);
-        alert(JSON.stringify(data))
+        console.log(JSON.stringify(data))
         dispatch(saveArticle(data))
         .then((res:any)=>{
-            const jihoon = res.payload.id
-            console.log(`게시글 작성 완료+ ${jihoon}`)
-            router.push(`${PG.ART}/list/${jihoon}`)
+            alert('게시글 작성 완료')
+            router.push(`${PG.ART}/myList/${res.meta.arg.boardId}`)
         })
         .catch((err:any)=>{
+            
         })
     }
 
     useEffect(() => {
-        console.log(JSON.stringify(jwtDecode<any>(parseCookies().accessToken)))
-        console.log('토큰을 디코드한 내용 : ')
-        console.log(jwtDecode<any>(parseCookies().accessToken))
+        // console.log('토큰을 디코드한 내용 : ')
+        // console.log(jwtDecode<any>(parseCookies().accessToken))
     }, [])
 
     return (
@@ -73,8 +49,8 @@ export default function ArticleSavePage() {
                 <select {...register('boardId', { required: true })}
                     defaultValue={1} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {
-                        options.map((item, index) => (
-                            <option key={item.id} title={item.title} value={item.id} >{item.content}</option>
+                        boards.map((item:any) => (
+                            <option key={item.id} title={item.title} value={item.id} >{item.title}</option>
                         ))
                     }
                 </select>
@@ -84,8 +60,9 @@ export default function ArticleSavePage() {
             <div className="heading text-center font-bold text-2xl m-5 text-gray-800">게시글 작성</div>
             <style dangerouslySetInnerHTML={{ __html: "\n  body {background:white !important;}\n" }} />
             <div className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl">
-                <input type="hidden" value={jwtDecode<any>(parseCookies().accessToken).id} />
-                <input {...register('title', { required: true })}
+                <input {...register('writerId',{required:true, maxLength:30})}
+                    type="hidden" value={jwtDecode<any>(parseCookies().accessToken).userId} readOnly/>
+                <input {...register('title', { required: true, maxLength:300 })}
                     className="title bg-gray-100 border border-gray-300 p-2 mb-4 outline-none" spellCheck="false" placeholder="Title" type="text" />
                 <textarea {...register('content', { required: true })}
                     className="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none" spellCheck="false" placeholder="Describe everything about this post here" defaultValue={""} />

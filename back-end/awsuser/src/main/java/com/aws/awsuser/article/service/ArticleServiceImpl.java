@@ -31,25 +31,24 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public MessengerVO save(ArticleDTO dto) {
         log.info("service dto 너머옴 " + dto);
-        Article ac = Article.builder()
+        Article ac = repo.save(Article.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .board(boardRepo.findById(dto.getBoardId()).orElseThrow(null))
-                .writer(userRepo.findById(1L).orElseThrow(null))
-                .build();
-        log.info("저장 이후 : {}", ac);
-        repo.save(ac);
+                .writer(userRepo.findById(dto.getWriterId()).orElseThrow(null))
+                .build());
         return MessengerVO.builder()
-                .message(
-                        repo.existsByTitle(dto.getTitle()) ? "SUCCESS" : "FAILURE"
-                )
+                .message( repo.existsByTitle(dto.getTitle()) ? "SUCCESS" : "FAILURE" )
                 .id(ac.getBoard().getId())
                 .build();
     }
 
     @Override
     public MessengerVO deleteById(Long id) {
-        return new MessengerVO();
+        repo.deleteById(id);
+        return MessengerVO.builder()
+                .message(repo.existsById(id)?"FAILURE":"SUCCESS")
+                .build();
     }
 
     @Override

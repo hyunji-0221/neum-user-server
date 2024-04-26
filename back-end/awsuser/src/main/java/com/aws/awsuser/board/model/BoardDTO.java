@@ -20,6 +20,7 @@ public class BoardDTO {
 
     private String title;
     private String description;
+    private String content;
 
     private Long articles;
 

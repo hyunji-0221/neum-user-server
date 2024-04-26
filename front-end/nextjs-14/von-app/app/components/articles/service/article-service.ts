@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { findAllArticlesAPI, findAllByBoardIdAPI, findArticleByIdAPI, saveArticleAPI } from "./article-api";
+import { deleteArticleAPI, findAllArticlesAPI, findAllByBoardIdAPI, findArticleByIdAPI, saveArticleAPI } from "./article-api";
 import { IArticle } from "../model/article-model";
 
 export const findAllArticles: any = createAsyncThunk(
@@ -11,12 +11,10 @@ export const findAllArticles: any = createAsyncThunk(
     }
 )
 
-
 export const findAllByBoardId:any = createAsyncThunk(
     'articles/findAllByBoardId',
     async(id:any) => (await findAllByBoardIdAPI(id)) 
 )
-
 
 export const findArticleById:any = createAsyncThunk(
     'articles/findArticleById',
@@ -26,7 +24,14 @@ export const findArticleById:any = createAsyncThunk(
 
 export const saveArticle:any = createAsyncThunk(
     'articles/saveArticle',
-    async(data:any) => {
+    async(data:IArticle) => {
         console.log('service ' + JSON.stringify(data))
         await saveArticleAPI(data)}
+)
+
+export const deleteArticle:any = createAsyncThunk(
+    'articles/deleteArticle',
+    async(id:number) => {
+        console.log('service ' + id)
+        await deleteArticleAPI(id)}
 )

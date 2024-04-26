@@ -34,15 +34,12 @@ public class ArticleController {
     @PostMapping( "/save")
     public ResponseEntity<MessengerVO> save(@RequestBody ArticleDTO dto) throws SQLException {
         log.info("dto 넘어옴 : {}",dto);
-        log.info("board" + dto.getBoardId());
-        log.info("writer" + dto.getWriterId());
         return ResponseEntity.ok(service.save(dto));
     }
 
-    @DeleteMapping(path = "/delete")
-    public ResponseEntity<MessengerVO> deleteById(@RequestParam long id) throws SQLException {
-        service.deleteById(0L);
-        return ResponseEntity.ok(new MessengerVO());
+    @DeleteMapping("/delete")
+    public ResponseEntity<MessengerVO> deleteById(@RequestParam("id") Long id){
+        return ResponseEntity.ok(service.deleteById(id));
     }
 
     @GetMapping(path = "/list")
@@ -71,5 +68,7 @@ public class ArticleController {
     public ResponseEntity<List<ArticleDTO>> findAllByBoardId(@RequestParam("id") Long boardId){
         return ResponseEntity.ok(service.getArticlesByBoardId(boardId));
     }
+
+
 
 }

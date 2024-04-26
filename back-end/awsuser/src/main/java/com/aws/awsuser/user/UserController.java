@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/detail") //@PathVariable 어노테이션은 파라미터변수와 같아야함.
-    public ResponseEntity<Optional<UserDTO>> findUserById(@RequestParam Long id) {
+    public ResponseEntity<Optional<UserDTO>> findUserById(@RequestParam("id") Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
@@ -50,8 +50,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<MessengerVO> deleteUser(@RequestParam Long id) {
-        log.info("delete 결과 : {}",service.deleteById(id));
+    public ResponseEntity<MessengerVO> deleteUser(@RequestParam("id") Long id) {
         return ResponseEntity.ok(service.deleteById(id));
     }
 

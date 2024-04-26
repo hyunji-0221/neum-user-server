@@ -29,7 +29,7 @@ export const findArticleByIdAPI = async(art:IArticle) =>{
     }
 }
 
-export const saveArticleAPI = async(data:any) =>{
+export const saveArticleAPI = async(data:IArticle) =>{
     try{
         console.log('api '+JSON.stringify(data))
         return (await instance().post('/articles/save',data)).data
@@ -38,3 +38,12 @@ export const saveArticleAPI = async(data:any) =>{
     }
 }
 
+export const deleteArticleAPI = async(id:number) => {
+    try{
+        return (await instance().delete('/articles/delete',{
+            params : {id}
+        })).data
+    }catch(error){
+        return error
+    }
+}

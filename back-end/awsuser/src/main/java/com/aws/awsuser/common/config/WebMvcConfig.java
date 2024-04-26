@@ -16,8 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {//인터셉터를 스프�
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/**") //이 경로로 들어오는 요청은 토큰이 없더라도 요청을 받아드림. = 인터셉터를 타지 않음.
-                .excludePathPatterns("/api/articles/**"); //이 경로로 들어오는 요청은 토큰이 없더라도 요청을 받아드림. = 인터셉터를 타지 않음.
+                .excludePathPatterns("/api/auth/**") ;//이 경로로 들어오는 요청은 토큰이 없더라도 요청을 받아드림. = 인터셉터를 타지 않음.
     }
 
 }

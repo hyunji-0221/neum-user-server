@@ -4,6 +4,5 @@ export interface IBoard{
     title? : string,
     description? : string,
     postdate? : string,
-    modDate? : string,
-    
+    modDate? : string
 }

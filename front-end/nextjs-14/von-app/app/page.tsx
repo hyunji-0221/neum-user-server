@@ -57,6 +57,7 @@ export default function Home() {
     console.log('user ...' + JSON.stringify(user))
     dispatch(existsUsername(user.username))
       .then((res: any) => {
+        console.log('main page user '+JSON.stringify(res))
         if (res.payload.message == "SUCCESS") {
           dispatch(login(user))
             .then((resp: any) => {

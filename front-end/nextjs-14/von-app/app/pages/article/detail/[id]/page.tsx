@@ -1,6 +1,7 @@
 'use client'
 
-import { findArticleById } from "@/app/components/articles/service/article-service";
+import { deleteArticle, findArticleById } from "@/app/components/articles/service/article-service";
+import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

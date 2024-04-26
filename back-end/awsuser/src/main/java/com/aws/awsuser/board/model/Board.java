@@ -22,6 +22,7 @@ public class Board extends BaseEntity {
 
     private String title;
     private String description;
+    private String content;
 
     @OneToMany(mappedBy = "board",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Article> articles;

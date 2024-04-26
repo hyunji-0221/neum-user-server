@@ -3,6 +3,9 @@ import { ArticleColumn } from "../model/ArticleColumn";
 import { Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { PG } from "../../common/enums/PG";
+import { useDispatch } from "react-redux";
+import { deleteArticle } from "../service/article-service";
+import { useRouter } from "next/navigation";
 
 //타입의 정의는 function 밖에서
 interface CellType {
@@ -11,6 +14,10 @@ interface CellType {
 
 
 export default function ArticleColumns(): GridColDef[] {
+
+    const dispatch = useDispatch()
+    const router = useRouter()
+
     return [
         {
             flex: 0.04,
@@ -84,7 +91,19 @@ export default function ArticleColumns(): GridColDef[] {
             field: 'delete',
             headerName: '삭제',
             renderCell: ({ row }: CellType) =>
-                <Button>삭제</Button>
+                <Button onClick={() => {
+                    if (window.confirm("article 삭제합니다.")) {
+                        dispatch(deleteArticle(row.id))
+                        .then((res:any)=>{
+                        console.log(JSON.stringify(res))
+
+                        })
+                        // location.reload()
+                    } else {
+                        alert('취소하였습니다.')
+                    }
+
+                }}>삭제</Button>
         },
     ]
 }
